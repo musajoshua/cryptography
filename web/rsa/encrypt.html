@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>RSA Cryptosystem</title>
+		<title>RSA Encryption</title>
 		<link
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
@@ -63,11 +63,13 @@
 				<div class="not">
 					<div class="carde">
 						<div class="col s6">
-							<div
-								id="file-holder"
-								class="col s12"
-								style="width: 100%; height: 300px;"
-							></div>
+							<div class="input-field col s12">
+								<textarea
+									disabled
+									id="plain_file_view"
+									class="txt_area"
+								></textarea>
+							</div>
 							<div class="input-field col s12">
 								<form
 									enctype="multipart/form-data"
@@ -84,7 +86,8 @@
 						<div class="col s6">
 							<div class="input-field col s12">
 								<textarea
-									id="encrypted_file"
+									disabled
+									id="encrypted_file_view"
 									class="txt_area"
 								></textarea>
 							</div>
@@ -98,13 +101,14 @@
 						</div>
 						<div class="col s12">
 							<textarea
-								placeholder="Enter Public Keys"
+								placeholder="Enter Public Keys Seperated By comma(,)"
 								id="public_key"
 								class="materialize-textarea txt_area1"
 							></textarea>
 						</div>
 						<div class="col s12">
 							<textarea
+								disabled
 								placeholder="Time Taken To Encrypt"
 								id="time_taken_to_encrypt"
 								class="materialize-textarea txt_area1"
@@ -125,10 +129,11 @@
 				</div>
 			</div>
 		</div>
-
+		<!-- Compiled and minified JavaScript -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		<script type="text/javascript" src="/eel.js"></script>
 		<script src="../node_modules/file-saver/src/FileSaver.js"></script>
+		<script src="../fileReader.js"></script>
 		<script src="./encrypt.js"></script>
 	</body>
 </html>

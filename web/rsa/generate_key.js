@@ -1,9 +1,9 @@
 submit = () => {
 	eel.rsa_key_gen()((data) => {
-		const [pub_key, pri_key] = data;
+		const [public, private] = data;
 
 		// Display key
-		document.getElementById("public_key").innerHTML = pub_key;
-		document.getElementById("private_key").innerHTML = pri_key;
+		document.getElementById("public_key").value = public;
+		document.getElementById("private_key").value = private;
 	});
 };

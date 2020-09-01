@@ -1,7 +1,35 @@
+$(document).ready(function () {
+	$("#encrypted_file").on("change", async function () {
+		var filePath = $(this)[0].value;
+		var extn = filePath
+			.substring(filePath.lastIndexOf(".") + 1)
+			.toLowerCase();
+		if (typeof FileReader != "undefined") {
+			if (extn == "txt") {
+				let plainData = await readFile($(this)[0].files[0]);
+				document.getElementById(
+					"encrypted_file_view"
+				).value = plainData;
+			} else {
+				alert("Pls select text files only");
+			}
+		} else {
+			alert("This Application does not support FileReader.");
+		}
+	});
+});
+
 submit = async () => {
-	// get public keys
-	// let public_keys = document.getElementById("public_key").value;
-	let private_keys = [198131, 120013];
+	// get private keys
+	let private_key = document.getElementById("private_key").value;
+	if (!private_key) {
+		alert("Please Enter Your Private Key");
+		return;
+	}
+	const [n, e] = private_key.split(",");
+
+	private_key = [parseInt(n), parseInt(e)];
+
 	// get file for encryption
 	let file = document.getElementById("encrypted_file").files[0];
 	if (!file) {
@@ -9,55 +37,26 @@ submit = async () => {
 		return;
 	}
 
-	// console.log(file);
+	let encryptedData = await readFile(file);
+	eel.rsa_decrypt(
+		private_key,
+		encryptedData
+	)((data) => {
+		let plain_string = data[0];
+		let time_taken = data[1];
 
-	let reader = new FileReader();
-	reader.onload = async () => {
-		let dataURL = await reader.result;
-		document.getElementById("textarea1").value = dataURL;
-		eel.rsa_decrypt(
-			private_keys,
-			dataURL
-		)((data) => {
-			let cipher_string = data[0];
-			// console.log(cipher_string);
-			let time_taken = data[1];
-
-			// console.log(cipher_string);
-
-			var blob = new Blob([cipher_string], {
-				type: "text/plain;charset=utf-8",
-				// type: "image/png",
-			});
-			saveAs(blob, "plain.txt");
-
-			document.getElementById("time_taken_to_decrypt").value = time_taken;
-			// document.getElementById("encrypted_file").value = cipher_string;
-		});
-	};
-	reader.readAsText(file);
-	// let dd = await reader.result;
-	// console.log(dd);
-
-	// let fileURL = URL.createObjectURL(file);
-	// console.log(file);
-
-	// eel.rsa_encrypt(
-	// 	public_keys,
-	// 	file
-	// )((data) => {
-	// 	// alert(data);
-	// 	console.log(data);
-	// });
+		document.getElementById("time_taken_to_decrypt").value = time_taken;
+		document.getElementById("decrypted_file_view").value = plain_string;
+	});
 };
 
 download = () => {
-	let cipher_string = document.getElementById("encrypted_file").value;
-	if (!cipher_string) {
+	let plain_string = document.getElementById("decrypted_file_view").value;
+	if (!plain_string) {
 		alert("No file to download");
 		return;
 	}
 
-	var blob = new Blob([cipher_string], { type: "text/plain;charset=utf-8" });
-	saveAs(blob, "enc.enc");
+	var blob = new Blob([plain_string], { type: "text/plain;charset=utf-8" });
+	saveAs(blob, "dec.txt");
 };
